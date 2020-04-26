@@ -1,47 +1,134 @@
-window.omload=function(){
-	let calculator = document.querySelector('.calculator ')
-	 let keys = calculator.querySelector('.calculator__keys ')
+let leftOperand="0";
+let rightOperand="0";
+let operator='';
+let display=document.querySelector(".calculator__display");
 
-	  keys.addEventListener('click', function(e){
-if (e.target.matches('button ')) { // Do something
-} })
-let key = e.target
-let action = key.dataset.action
-if (!action) { console.log('number key!')
-}
-if (action === 'add' ||
-action === 'subtract ' ||
-action === 'multiply ' ||
-action === 'divide') { console.log('operator key!') }
-if (action === 'decimal ') {
-	console.log('decimal key!')
-}
-if (action === 'clear ') { 
-	console.log('clear key!')
+function handleKeyPress(event)
+{
+	let button=event.target;
+	let buttonType=button.getAttribute("data-type");
+	if(buttonType=="number")
+	{
+		if(operator=="")
+		{
+			if(leftOperand=="0")
+			{
+				leftOperand=`${button.innerText}`;
+			}
+			else
+			{
+				leftOperand+=`${button.innerText}`;
+			}
+			display.firstChild.nodeValue=leftOperand;
+		}
+		else
+		{
+			if(rightOperand=="0")
+			{
+				rightOperand=`${button.innerText}`;
+			}
+			else
+			{
+				rightOperand+=`${button.innerText}`;
+			}
+			display.firstChild.nodeValue=rightOperand;
+			
+		}
 	}
-if (action === 'calculate ') { 
-	console.log('equal key!')
-}
-const display = document.querySelector('.calculator__display ') keys.addEventListener('click', e => {
-(e.target.matches('button ')) {
-const key = e.target
-const action = key.dataset.action
-const keyContent = key.textContent
-const displayedNum = display.textContent // ...
-if
-} })
-if (!action) {
-if (displayedNum === '0') {
-display.textContent = keyContent }
+	else if(buttonType=="operator")
+	{
+		let buttonAction=button.getAttribute("data-action");
+		switch(buttonAction)
+		{
+			case "add":
+			{
+				operator="+";
+				display.firstChild.nodeValue="0";
+				break;
+			}
+			case "subtract":
+			{
+				operator="-";
+				display.firstChild.nodeValue="0";
+				break;
+			}
+			case "multiply":
+			{
+				operator="*";
+				display.firstChild.nodeValue="0";
+				break;
+			}
+			case "divide":
+			{
+				operator="/";
+				display.firstChild.nodeValue="0";
+				break;
+			}
+			case "decimal":
+			{
+				if(operator=="")
+				{
+					leftOperand+=".";
+					display.firstChild.nodeValue=leftOperand;
+					break;
+				}
+				else
+				{
+					rightOperand+=".";
+					display.firstChild.nodeValue=rightOperand;
+					break;
+				}
+				break;
+			}
+			case "clear":
+			{
+				operator="";
+				leftOperand="0";
+				rightOperand="0";
+				display.firstChild.nodeValue="0";
+				break;
+			}
+			case "calculate":
+			{
+				switch(operator)
+				{
+					case "+":
+					{
+						display.firstChild.nodeValue=Number(leftOperand)+Number(rightOperand);
+						break;
+					}
+					case "-":
+					{
+						display.firstChild.nodeValue=Number(leftOperand)-Number(rightOperand);
+						break;
+					}
+					case "/":
+					{
+						display.firstChild.nodeValue=Number(leftOperand)/Number(rightOperand);
+						break;
+					}
+					case "*":
+					{
+						display.firstChild.nodeValue=Number(leftOperand)*Number(rightOperand);
+						break;
+					}
+					default:{
+						break;
+					}
+				}
+				leftOperand=`${display.firstChild.nodeValue}`;
+				rightOperand="0";
+				operator="";
+				break;
+			}
+			default:{break;}
+		}
+	}
+	else{}
 }
 
-if (!action) {
-if (displayedNum === '0') {
-display.textContent = keyContent } else {
-display.textContent = displayedNum + keyContent }
-}
-if (action === 'decimal') {
-  display.textContent = displayedNum + '.'
-}
-
+let keys=document.querySelector(".calculator__keys");
+for(let child of keys.children)
+{
+	child.addEventListener("click",handleKeyPress);
 }
